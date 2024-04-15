@@ -10,6 +10,7 @@ public class DBConnectContext(DbContextOptions<DBConnectContext> options) : DbCo
             new User
             {
                 Id = 1,
+                Name = "Lucas",
                 Email = "Lucas@teste.com",
                 Password = "pass123",
                 Profile = "ADM"

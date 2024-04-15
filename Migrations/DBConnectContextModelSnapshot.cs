@@ -67,6 +67,11 @@ namespace BookAPI.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -86,6 +91,7 @@ namespace BookAPI.Migrations
                         {
                             Id = 1,
                             Email = "Lucas@teste.com",
+                            Name = "Lucas",
                             Password = "pass123",
                             Profile = "ADM"
                         });

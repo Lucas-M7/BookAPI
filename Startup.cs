@@ -129,16 +129,17 @@ public class Startup
 
             endpoints.MapPost("/user/login", ([FromBody] LoginDTO loginDTO, IUserService administratorService) =>
             {
-                var adm = administratorService.Login(loginDTO);
+                var usr = administratorService.Login(loginDTO);
 
-                if (adm != null)
+                if (usr != null)
                 {
-                    string token = GenerateTokenJwt(adm);
+                    string token = GenerateTokenJwt(usr);
 
                     return Results.Ok(new UserLogedIn
                     {
-                        Email = adm.Email,
-                        Profile = adm.Profile,
+                        Email = usr.Email,
+                        Name = usr.Name,
+                        Profile = usr.Profile,
                         Token = token
                     });
                 }
@@ -146,7 +147,7 @@ public class Startup
                     return Results.Unauthorized();
             }).AllowAnonymous().WithTags("Users");
 
-            endpoints.MapPost("/user/registration", ([FromBody] UserDTO userDTO, IUserService userService) =>
+            endpoints.MapPost("/user/registration", ([FromBody] UserDTO userDTO, IUserService userService, DBConnectContext dBConnect) =>
             {
                 var validation = new ValidationError()
                 {
@@ -156,8 +157,17 @@ public class Startup
                 if (string.IsNullOrEmpty(userDTO.Email))
                     validation.Messages.Add("Invalid Email");
 
+                if (dBConnect.Users.Any(e => e.Email == userDTO.Email))
+                    validation.Messages.Add("Email already exists.");
+
+                if (dBConnect.Users.Any(n => n.Name == userDTO.Name))
+                    validation.Messages.Add("Name already exists.");
+
                 if (string.IsNullOrEmpty(userDTO.Password))
                     validation.Messages.Add("Invalid Password");
+
+                 if (userDTO.Password.Length < 4)
+                    validation.Messages.Add("The password must be at least 4 characters long");
 
                 if (userDTO.Profile == null)
                     validation.Messages.Add("Invalid Profile");
@@ -168,6 +178,7 @@ public class Startup
                 var user = new User()
                 {
                     Email = userDTO.Email,
+                    Name = userDTO.Name,
                     Password = userDTO.Password,
                     Profile = userDTO.Profile.ToString() ?? Profile.Common.ToString()
                 };
@@ -177,6 +188,7 @@ public class Startup
                 return Results.Created($"/user/{user.Id}", new UserModelView
                 {
                     Id = user.Id,
+                    Name = user.Name,
                     Email = user.Email,
                     Profile = user.Profile
                 });
@@ -193,6 +205,7 @@ public class Startup
                     {
                         Id = user.Id,
                         Email = user.Email,
+                        Name = user.Name,
                         Profile = user.Profile
                     });
                 }
@@ -213,6 +226,7 @@ public class Startup
                 return Results.Ok(new UserModelView
                 {
                     Id = user.Id,
+                    Name = user.Name,
                     Email = user.Email,
                     Profile = user.Profile
                 });
@@ -294,7 +308,7 @@ public class Startup
 
                 var validation = validationDTO(bookDTO);
                 if (validation.Messages.Count > 0)
-                    return Results.BadRequest();   
+                    return Results.BadRequest();
 
                 book.Name = bookDTO.Name;
                 book.Category = bookDTO.Category;
@@ -318,7 +332,7 @@ public class Startup
 
                 bookService.Delete(book);
 
-                return Results.NoContent();    
+                return Results.NoContent();
             })
             .RequireAuthorization()
             .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM" })

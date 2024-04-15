@@ -52,6 +52,6 @@ public class UserService : IUserService
 
         if (users != null)
             _context.Users.Remove(users);
-            _context.SaveChanges();    
+        _context.SaveChanges();
     }
 }

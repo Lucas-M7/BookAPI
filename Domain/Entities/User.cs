@@ -10,6 +10,10 @@ public class User
 
     [Required]
     [StringLength(255)]
+    public string Name { get; set; } = default!;
+
+    [Required]
+    [StringLength(255)]
     public string Email { get; set; } = default!;
 
     [Required]

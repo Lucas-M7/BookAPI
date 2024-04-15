@@ -32,7 +32,6 @@ public class BookService : IBookService
 
     public void Delete(Book book)
     {
-
         _context.Books.Remove(book);
         _context.SaveChanges();
     }
