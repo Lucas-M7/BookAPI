@@ -181,8 +181,6 @@ public class Startup
                     Profile = user.Profile
                 });
             })
-            .RequireAuthorization()
-            .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM" })
             .WithTags("Users");
 
             endpoints.MapGet("/user/list", ([FromQuery] int? page, IUserService userService) =>
