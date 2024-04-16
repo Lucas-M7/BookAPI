@@ -23,4 +23,8 @@ public class Book
     [Required]
     [StringLength(50)]
     public string DateRelease { get; set; } = default!;
+
+    [Required]
+    [StringLength(150)]
+    public string UserName { get; set; } = default!;
 }

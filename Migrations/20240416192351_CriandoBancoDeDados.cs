@@ -19,7 +19,8 @@ namespace BookAPI.Migrations
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     Category = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Author = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DateRelease = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    DateRelease = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
                 },
                 constraints: table =>
                 {

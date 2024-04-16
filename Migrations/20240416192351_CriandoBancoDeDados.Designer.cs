@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookAPI.Migrations
 {
     [DbContext(typeof(DBConnectContext))]
-    [Migration("20240415211709_CriandoBancoDeDados")]
+    [Migration("20240416192351_CriandoBancoDeDados")]
     partial class CriandoBancoDeDados
     {
         /// <inheritdoc />
@@ -48,6 +48,11 @@ namespace BookAPI.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");

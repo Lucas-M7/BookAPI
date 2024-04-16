@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using BookAPI.Domain.DTOs;
@@ -79,6 +80,16 @@ public class Startup
                     Array.Empty<string>()
                 }
             });
+
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "BookAPI",
+                Description = "An API where users can register their favorite books"
+            });
+
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
 
         services.AddDbContext<DBConnectContext>(options =>
@@ -166,7 +177,7 @@ public class Startup
                 if (string.IsNullOrEmpty(userDTO.Password))
                     validation.Messages.Add("Invalid Password");
 
-                 if (userDTO.Password.Length < 4)
+                if (userDTO.Password.Length < 4)
                     validation.Messages.Add("The password must be at least 4 characters long");
 
                 if (userDTO.Profile == null)
@@ -276,6 +287,7 @@ public class Startup
 
                 var book = new Book
                 {
+                    UserName = bookDTO.UserName,
                     Name = bookDTO.Name,
                     Category = bookDTO.Category,
                     Author = bookDTO.Author,
