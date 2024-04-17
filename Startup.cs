@@ -111,7 +111,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             #region Home
-            endpoints.MapGet("/", () => Results.Json(new Home())).AllowAnonymous().WithTags("Home");
+            endpoints.MapGet("/Wellcome/", () => Results.Json(new Home())).AllowAnonymous().WithTags("Home");
             #endregion
 
             #region  User
@@ -156,7 +156,8 @@ public class Startup
                 }
                 else
                     return Results.Unauthorized();
-            }).AllowAnonymous().WithTags("Users");
+            }).AllowAnonymous()
+            .WithTags(["Users"]);
 
             endpoints.MapPost("/user/registration", ([FromBody] UserDTO userDTO, IUserService userService, DBConnectContext dBConnect) =>
             {
@@ -165,14 +166,14 @@ public class Startup
                     Messages = []
                 };
 
-                if (string.IsNullOrEmpty(userDTO.Email))
+                if (string.IsNullOrEmpty(userDTO.Email) || !userDTO.Email.Contains('@') || !userDTO.Email.EndsWith(".com"))
                     validation.Messages.Add("Invalid Email");
 
                 if (dBConnect.Users.Any(e => e.Email == userDTO.Email))
                     validation.Messages.Add("Email already exists.");
 
                 if (dBConnect.Users.Any(n => n.Name == userDTO.Name))
-                    validation.Messages.Add("Name already exists.");
+                    validation.Messages.Add("Username already exists.");
 
                 if (string.IsNullOrEmpty(userDTO.Password))
                     validation.Messages.Add("Invalid Password");
@@ -223,6 +224,7 @@ public class Startup
 
                 return Results.Ok(usr);
             })
+            .WithSummary("List").WithDescription("ondknd2d")
             .RequireAuthorization()
             .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM" })
             .WithTags("Users");
@@ -278,7 +280,7 @@ public class Startup
                 return validation;
             }
 
-            endpoints.MapPost("/book/registerBook/", ([FromBody] BookDTO bookDTO, IBookService bookService) =>
+            endpoints.MapPost("/book/registerBook/", ([FromBody] BookDTO bookDTO, UserDTO userDTO, IBookService bookService, DBConnectContext connectContext) =>
             {
                 var validation = validationDTO(bookDTO);
 
