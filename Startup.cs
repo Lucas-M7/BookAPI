@@ -1,5 +1,4 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using BookAPI.Domain.DTOs;
@@ -87,9 +86,6 @@ public class Startup
                 Title = "BookAPI",
                 Description = "An API where users can register their favorite books"
             });
-
-            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
 
         services.AddDbContext<DBConnectContext>(options =>
@@ -157,7 +153,7 @@ public class Startup
                 else
                     return Results.Unauthorized();
             }).AllowAnonymous()
-            .WithTags(["Users"]);
+            .WithTags("Users");
 
             endpoints.MapPost("/user/registration", ([FromBody] UserDTO userDTO, IUserService userService, DBConnectContext dBConnect) =>
             {
@@ -224,7 +220,6 @@ public class Startup
 
                 return Results.Ok(usr);
             })
-            .WithSummary("List").WithDescription("ondknd2d")
             .RequireAuthorization()
             .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM" })
             .WithTags("Users");
@@ -280,7 +275,7 @@ public class Startup
                 return validation;
             }
 
-            endpoints.MapPost("/book/registerBook/", ([FromBody] BookDTO bookDTO, UserDTO userDTO, IBookService bookService, DBConnectContext connectContext) =>
+            endpoints.MapPost("/book/registerBook/", ([FromBody] BookDTO bookDTO, IBookService bookService, DBConnectContext connectContext) =>
             {
                 var validation = validationDTO(bookDTO);
 
