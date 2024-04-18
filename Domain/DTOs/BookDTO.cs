@@ -6,4 +6,5 @@ public class BookDTO
     public string Category { get; set; } = default!;
     public string Author { get; set; } = default!;
     public string DateRelease { get; set; } = default!;
+    public bool Readed { get; set; } = default!;
 }

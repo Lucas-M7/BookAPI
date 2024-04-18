@@ -47,6 +47,17 @@ public class Startup
             };
         });
 
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigin",
+            builder =>
+            {
+                builder.WithOrigins("http://127.0.0.1:5500")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         services.AddAuthorization();
 
         services.AddScoped<IUserService, UserService>();
@@ -103,6 +114,8 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseCors("AllowSpecificOrigin");
 
         app.UseEndpoints(endpoints =>
         {

@@ -25,6 +25,9 @@ public class Book
     public string DateRelease { get; set; } = default!;
 
     [Required]
+    public bool Readed { get; set; }
+
+    [Required]
     [StringLength(150)]
     public string UserName { get; set; } = default!;
 }
