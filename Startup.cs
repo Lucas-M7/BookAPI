@@ -120,10 +120,10 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             #region Home
-            endpoints.MapGet("/Wellcome/", () => Results.Json(new Home())).AllowAnonymous().WithTags("Home");
+            endpoints.MapGet("/wellcome/", () => Results.Json(new Home())).AllowAnonymous().WithTags("Home");
             #endregion
 
-            #region  User
+            #region  Users
             string GenerateTokenJwt(User user)
             {
                 if (string.IsNullOrEmpty(Key)) return string.Empty;
@@ -147,7 +147,7 @@ public class Startup
                 return new JwtSecurityTokenHandler().WriteToken(token);
             }
 
-            endpoints.MapPost("/user/login", ([FromBody] LoginDTO loginDTO, IUserService administratorService) =>
+            endpoints.MapPost("/users/login", ([FromBody] LoginDTO loginDTO, IUserService administratorService) =>
             {
                 var usr = administratorService.Login(loginDTO);
 
@@ -168,7 +168,7 @@ public class Startup
             }).AllowAnonymous()
             .WithTags("Users");
 
-            endpoints.MapPost("/user/registration", ([FromBody] UserDTO userDTO, IUserService userService, DBConnectContext dBConnect) =>
+            endpoints.MapPost("/users/", ([FromBody] UserDTO userDTO, IUserService userService, DBConnectContext dBConnect) =>
             {
                 var validation = new ValidationError()
                 {
@@ -216,7 +216,7 @@ public class Startup
             })
             .WithTags("Users");
 
-            endpoints.MapGet("/user/list", ([FromQuery] int? page, IUserService userService) =>
+            endpoints.MapGet("/users/", ([FromQuery] int? page, IUserService userService) =>
             {
                 var usr = new List<UserModelView>();
                 var users = userService.AllUsers(page);
@@ -237,7 +237,7 @@ public class Startup
             .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM" })
             .WithTags("Users");
 
-            endpoints.MapGet("/user/searchForId/{id}", ([FromRoute] int id, IUserService userService) =>
+            endpoints.MapGet("/users/{id}", ([FromRoute] int id, IUserService userService) =>
             {
                 var user = userService.SearchForId(id);
 
@@ -256,7 +256,7 @@ public class Startup
             .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM" })
             .WithTags("Users");
 
-            endpoints.MapDelete("/user/delete/{id}", ([FromServices] IUserService userService, int id) =>
+            endpoints.MapDelete("/users/{id}", ([FromServices] IUserService userService, int id) =>
             {
                 var user = userService.SearchForId(id);
 
@@ -271,7 +271,7 @@ public class Startup
             .WithTags("Users");
             #endregion
 
-            #region Book
+            #region Books
             static ValidationError validationDTO(BookDTO bookDTO)
             {
                 var validation = new ValidationError
@@ -288,7 +288,7 @@ public class Startup
                 return validation;
             }
 
-            endpoints.MapPost("/book/registerBook/", ([FromBody] BookDTO bookDTO, IBookService bookService, DBConnectContext connectContext) =>
+            endpoints.MapPost("/books/", ([FromBody] BookDTO bookDTO, IBookService bookService, DBConnectContext connectContext) =>
             {
                 var validation = validationDTO(bookDTO);
 
@@ -311,7 +311,7 @@ public class Startup
             .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM, Common" })
             .WithTags("Books");
 
-            endpoints.MapGet("/book/list", ([FromQuery] int? page, IBookService bookService) =>
+            endpoints.MapGet("/books/", ([FromQuery] int? page, IBookService bookService) =>
             {
                 var books = bookService.AllBooks(page);
 
@@ -321,7 +321,7 @@ public class Startup
             .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM, Common" })
             .WithTags("Books");
 
-            endpoints.MapPut("/book/updateBook/{id}", ([FromRoute] int id, BookDTO bookDTO, IBookService bookService) =>
+            endpoints.MapPut("/books/{id}", ([FromRoute] int id, BookDTO bookDTO, IBookService bookService) =>
             {
                 var book = bookService.SearchForId(id);
 
@@ -345,7 +345,7 @@ public class Startup
             .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM" })
             .WithTags("Books");
 
-            endpoints.MapDelete("/book/{id}", ([FromRoute] int id, IBookService bookService) =>
+            endpoints.MapDelete("/books/{id}", ([FromRoute] int id, IBookService bookService) =>
             {
                 var book = bookService.SearchForId(id);
 
