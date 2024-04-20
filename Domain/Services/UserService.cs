@@ -4,14 +4,9 @@ using BookAPI.Domain.Interfaces;
 using BookAPI.Infraestruture.DB;
 
 namespace BookAPI.Domain.Services;
-public class UserService : IUserService
+public class UserService(DBConnectContext context) : IUserService
 {
-    private readonly DBConnectContext _context;
-
-    public UserService(DBConnectContext context)
-    {
-        _context = context;
-    }
+    private readonly DBConnectContext _context = context;
 
     public User? Login(LoginDTO loginDTO)
     {
@@ -32,6 +27,7 @@ public class UserService : IUserService
         return _context.Users.Where(v => v.Id == id).FirstOrDefault();
     }
 
+    #region Paginação
     public List<User> AllUsers(int? page)
     {
         var query = _context.Users.AsQueryable();
@@ -45,6 +41,7 @@ public class UserService : IUserService
 
         return [.. query];
     }
+    #endregion
 
     public void Delete(int id)
     {

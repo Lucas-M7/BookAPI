@@ -28,9 +28,10 @@ public class Startup
         Key = Configuration.GetSection("Jwt").ToString();
     }
 
+    // Configuração dos serviços
     public void ConfigureServices(IServiceCollection services)
     {
-
+        // Configurando Token JWT
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -47,6 +48,7 @@ public class Startup
             };
         });
 
+        // Dando autorização para aceitar requests do endereço mencionado
         services.AddCors(options =>
         {
             options.AddPolicy("AllowSpecificOrigin",
@@ -124,6 +126,7 @@ public class Startup
             #endregion
 
             #region  Users
+            // Função para gerar Token na hora do usuário solicitar o login.
             string GenerateTokenJwt(User user)
             {
                 if (string.IsNullOrEmpty(Key)) return string.Empty;
@@ -153,6 +156,7 @@ public class Startup
 
                 if (usr != null)
                 {
+                    // Chamada da função de gerar o token após a solicitação de login
                     string token = GenerateTokenJwt(usr);
 
                     return Results.Ok(new UserLogedIn
@@ -175,6 +179,7 @@ public class Startup
                     Messages = []
                 };
 
+                // Validações de Email, Senha, nome de usuário e perfil
                 if (string.IsNullOrEmpty(userDTO.Email) || !userDTO.Email.Contains('@') || !userDTO.Email.EndsWith(".com"))
                     validation.Messages.Add("Invalid Email");
 
@@ -184,11 +189,8 @@ public class Startup
                 if (dBConnect.Users.Any(n => n.Name == userDTO.Name))
                     validation.Messages.Add("Username already exists.");
 
-                if (string.IsNullOrEmpty(userDTO.Password))
-                    validation.Messages.Add("Invalid Password");
-
-                if (userDTO.Password.Length < 4)
-                    validation.Messages.Add("The password must be at least 4 characters long");
+                if (string.IsNullOrEmpty(userDTO.Password) || userDTO.Password.Length < 4)
+                    validation.Messages.Add("Check that the password is empty or has at least 4 characters.");
 
                 if (userDTO.Profile == null)
                     validation.Messages.Add("Invalid Profile");
@@ -336,6 +338,7 @@ public class Startup
                 book.Category = bookDTO.Category;
                 book.Author = bookDTO.Author;
                 book.DateRelease = bookDTO.DateRelease;
+                book.Readed = bookDTO.Readed;
 
                 bookService.Update(book);
 

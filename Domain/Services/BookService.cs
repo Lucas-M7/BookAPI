@@ -4,15 +4,11 @@ using BookAPI.Infraestruture.DB;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookAPI.Domain.Services;
-public class BookService : IBookService
+public class BookService(DBConnectContext context) : IBookService
 {
-    private readonly DBConnectContext _context;
+    private readonly DBConnectContext _context = context;
 
-    public BookService(DBConnectContext context)
-    {
-        _context = context;
-    }
-
+    #region Paginação
     public List<Book> AllBooks(int? page = 1, string? name = null, string? category = null, string? author = null, string? dateRelease = null)
     {
         var query = _context.Books.AsQueryable(); // Converter coleção de elemento em uma consulta LinQ
@@ -21,6 +17,7 @@ public class BookService : IBookService
             query = query.Where(v => EF.Functions.Like(v.Name.ToLower(), $"%{name.ToLower()}%"));
         }
 
+        // Lógica da paginação dos dados
         int itensForPage = 10;
 
         if (page != null)
@@ -29,6 +26,7 @@ public class BookService : IBookService
         }
         return [.. query];
     }
+    #endregion
 
     public void Delete(Book book)
     {
