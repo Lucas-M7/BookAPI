@@ -1,6 +1,5 @@
 using BookAPI.Domain.DTOs;
 using BookAPI.Domain.Entities;
-using BookAPI.Domain.ModelViews;
 
 namespace BookAPI.Domain.Interfaces;
 public interface IUserService

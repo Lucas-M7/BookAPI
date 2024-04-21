@@ -323,6 +323,28 @@ public class Startup
             .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM, Common" })
             .WithTags("Books");
 
+            endpoints.MapGet("/books/{id}", ([FromRoute] int id, IBookService bookService) =>
+            {
+                var book = bookService.SearchForId(id);
+
+                if (book == null)
+                    return Results.NotFound();
+
+                return Results.Ok(new BookModelView
+                {
+                    Id = book.Id,
+                    UserName = book.UserName,
+                    Name = book.Name,
+                    Category = book.Category,
+                    Author = book.Author,
+                    DateRelease = book.DateRelease,
+                    Readed = book.Readed
+                });
+            })
+            .RequireAuthorization()
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM, Common" })
+            .WithTags("Books");
+
             endpoints.MapPut("/books/{id}", ([FromRoute] int id, BookDTO bookDTO, IBookService bookService) =>
             {
                 var book = bookService.SearchForId(id);
