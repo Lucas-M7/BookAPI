@@ -2,6 +2,8 @@
 
 Esta é uma API desenvolvida para gerenciar o cadastro de usuários e livros. Ela permite o registro de dois tipos de usuários: administradores (ADM) e usuários comuns (Common). Além disso, utiliza Token JWT para autenticação e autorização durante o processo de login.
 
+<a href="https://ibb.co/Z1FfWp0"><img src="https://i.ibb.co/5xS1BgP/Foto-1.png" alt="Foto-1" border="0" /></a>
+
 ## Funcionalidades ⚙️
 
 - Cadastro, leitura, atualização e exclusão de usuários
