@@ -3,7 +3,7 @@ public class BookModelView
 {
     public int Id { get; set; }
     public string UserName { get; set; } = default!;
-    public string Name { get; set; } = default!;
+    public string Title { get; set; } = default!;
     public string Category { get; set; } = default!;
     public string Author { get; set; } = default!;
     public string DateRelease { get; set; } = default!;

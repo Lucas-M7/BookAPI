@@ -10,7 +10,7 @@ public class Book
 
     [Required]
     [StringLength(150)]
-    public string Name { get; set; } = default!;
+    public string Title { get; set; } = default!;
 
     [Required]
     [StringLength(50)]

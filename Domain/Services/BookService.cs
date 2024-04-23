@@ -9,12 +9,12 @@ public class BookService(DBConnectContext context) : IBookService
     private readonly DBConnectContext _context = context;
 
     #region Paginação
-    public List<Book> AllBooks(int? page = 1, string? name = null, string? category = null, string? author = null, string? dateRelease = null)
+    public List<Book> AllBooks(int? page = 1, string? title = null, string? category = null, string? author = null, string? dateRelease = null)
     {
         var query = _context.Books.AsQueryable(); // Converter coleção de elemento em uma consulta LinQ
-        if (!string.IsNullOrEmpty(name))
+        if (!string.IsNullOrEmpty(title))
         {
-            query = query.Where(v => EF.Functions.Like(v.Name.ToLower(), $"%{name.ToLower()}%"));
+            query = query.Where(v => EF.Functions.Like(v.Title.ToLower(), $"%{title.ToLower()}%"));
         }
 
         // Lógica da paginação dos dados

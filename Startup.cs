@@ -281,8 +281,8 @@ public class Startup
                     Messages = []
                 };
 
-                if (string.IsNullOrEmpty(bookDTO.Name))
-                    validation.Messages.Add("Invalid Name.");
+                if (string.IsNullOrEmpty(bookDTO.Title))
+                    validation.Messages.Add("Invalid Title.");
 
                 if (string.IsNullOrEmpty(bookDTO.Category))
                     validation.Messages.Add("Invalid Category.");
@@ -300,7 +300,7 @@ public class Startup
                 var book = new Book
                 {
                     UserName = bookDTO.UserName,
-                    Name = bookDTO.Name,
+                    Title = bookDTO.Title,
                     Category = bookDTO.Category,
                     Author = bookDTO.Author,
                     DateRelease = bookDTO.DateRelease
@@ -334,7 +334,7 @@ public class Startup
                 {
                     Id = book.Id,
                     UserName = book.UserName,
-                    Name = book.Name,
+                    Title = book.Title,
                     Category = book.Category,
                     Author = book.Author,
                     DateRelease = book.DateRelease,
@@ -356,7 +356,7 @@ public class Startup
                 if (validation.Messages.Count > 0)
                     return Results.BadRequest();
 
-                book.Name = bookDTO.Name;
+                book.Title = bookDTO.Title;
                 book.Category = bookDTO.Category;
                 book.Author = bookDTO.Author;
                 book.DateRelease = bookDTO.DateRelease;
