@@ -48,18 +48,6 @@ public class Startup
             };
         });
 
-        // Dando autorização para aceitar requests do endereço mencionado
-        services.AddCors(options =>
-        {
-            options.AddPolicy("AllowSpecificOrigin",
-            builder =>
-            {
-                builder.WithOrigins("http://127.0.0.1:5500")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-            });
-        });
-
         services.AddAuthorization();
 
         services.AddScoped<IUserService, UserService>();
