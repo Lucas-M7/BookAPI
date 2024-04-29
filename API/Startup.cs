@@ -105,8 +105,6 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseCors("AllowSpecificOrigin");
-
         app.UseEndpoints(endpoints =>
         {
             #region Home
