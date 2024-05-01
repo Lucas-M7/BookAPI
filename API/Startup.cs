@@ -50,6 +50,7 @@ public class Startup
 
         services.AddAuthorization();
 
+        #region Cors
         services.AddCors(options =>
         {
             options.AddPolicy("AllowSpecifiOrigin",
@@ -61,6 +62,7 @@ public class Startup
                     .AllowCredentials();     
             });
         });
+        #endregion
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBookService, BookService>();
@@ -187,7 +189,7 @@ public class Startup
                     validation.Messages.Add("Email already exists.");
 
                 if (dBConnect.Users.Any(n => n.Name == userDTO.Name))
-                    validation.Messages.Add("Username already exists.");
+                    validation.Messages.Add("Username already exists.");   
 
                 if (string.IsNullOrEmpty(userDTO.Password) || userDTO.Password.Length < 4)
                     validation.Messages.Add("Check that the password is empty or has at least 4 characters.");
