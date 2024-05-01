@@ -50,6 +50,18 @@ public class Startup
 
         services.AddAuthorization();
 
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecifiOrigin",
+            builder =>
+            {
+                builder.WithOrigins("http://127.0.0.1:5500")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();     
+            });
+        });
+
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBookService, BookService>();
 
@@ -99,6 +111,8 @@ public class Startup
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+
+        app.UseCors("AllowSpecifiOrigin");
 
         app.UseRouting();
 

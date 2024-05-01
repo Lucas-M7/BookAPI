@@ -11,20 +11,27 @@
 
 <body>
     <div class="page">
-        <form method="POST" class="formLogin">
+        <form method="POST" class="formLogin" id="loginForm">
             <h1>Login</h1>
-            <p>Digite os seus dados de acesso nos campos abaixo.</p>
+            <p>Digite os seus dados de acesso no campo abaixo.</p>
             <label for="email">E-mail</label>
-            <input type="email" placeholder="Digite seu e-mail" autofocus="true" class="email"/>
+            <input type="email" placeholder="Digite seu e-mail" autofocus="true" id="email" />
             <label for="password">Senha</label>
-            <input type="password" placeholder="Digite sua senha" class="senha"/>
+            <input type="password" placeholder="Digite sua senha" id="senha" />
+
+            <div id="token-input" style="display: none;">
+                <label for="token">Seu token de acesso:</label>
+                <input type="text" id="token" placeholder="Insira aqui o seu token de acesso">
+            </div>
+
             <div class="cadastro">
-                <p>Não possui uma conta?</p><a href="#">Cadastrar</a>
+                <p>Não possui uma conta? <a href="#">Realizar cadastro</a></p>
             </div>
             <input type="submit" value="Acessar" class="btn" />
         </form>
     </div>
 
+    <script src="SRC/js/script.js"></script>
 </body>
 
 </html>

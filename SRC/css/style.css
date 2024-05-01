@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 .page {
@@ -15,14 +15,14 @@
     justify-content: center;
     width: 100%;
     height: 100vh;
-    background-color: #063344;
+    background-color: #065879;
 }
 
 .formLogin {
     display: flex;
     flex-direction: column;
-    background-color: #00000054;
-    border-radius: 7px;
+    background-color: #ffffff1c;
+    border-radius: 14px;
     padding: 40px;
     box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.4);
     gap: 5px
@@ -46,31 +46,20 @@
     margin-bottom: 25px;
 }
 
-.formLogin .email, .senha {
+.formLogin input {
     padding: 15px;
-    font-size: 16px;
-    border: 1px solid #000000;
+    font-size: 14px;
+    border: 1px solid #ccc;
     margin-bottom: 20px;
     margin-top: 5px;
     border-radius: 4px;
     transition: all linear 160ms;
     outline: none;
+}
+
+.formLogin #email, #senha, #token{
     color: black;
-}
-
-.cadastro {
-    display: flex;
-    justify-content: space-between;
-}
-
-.cadastro a {
-    text-decoration: none;
-    transition: .2s all ease-out;
-}
-
-.cadastro a:hover {
-    color: #08767e;
-    transform: scale(1.03);
+    font-size: 16px;
 }
 
 
@@ -84,21 +73,39 @@
 }
 
 .btn {
-    background-color: #053e42;
-    color: white;
+    background-color: #082d6400;
+    color: #fff;
     font-size: 14px;
     font-weight: 600;
     border: none !important;
     transition: all linear 160ms;
     cursor: pointer;
     margin: 0 !important;
-    padding: 20px;
-    border-radius: 4px;
 
 }
 
 .btn:hover {
     transform: scale(1.05);
-    background-color: #053e425e;
+    background-color: #0007474b;
 
 }
+
+.cadastro p {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cadastro a {
+    text-decoration: none;
+    background-color: #0007474b;
+    padding: 6px;
+    border-radius: 20px;
+    font-size: 13px;
+    transition: .2s all ease-out;
+}
+
+.cadastro a:hover {
+    transform: scale(1.1);
+    background-color: transparent;
+}
+
