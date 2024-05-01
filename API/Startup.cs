@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using BookAPI.Domain.DTOs;
 using BookAPI.Domain.Entities;
 using BookAPI.Domain.Enuns;
@@ -182,11 +183,18 @@ public class Startup
                 };
 
                 // Validações de Email, Senha, nome de usuário e perfil
-                if (string.IsNullOrEmpty(userDTO.Email) || !userDTO.Email.Contains('@') || !userDTO.Email.EndsWith(".com"))
-                    validation.Messages.Add("Invalid Email");
+
+                string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+                string namePattern = @"^[a-zA-Z]+$";
+
+                if (!Regex.IsMatch(userDTO.Email, emailPattern))
+                    validation.Messages.Add("invalid email make sure you use the right characters.");
 
                 if (dBConnect.Users.Any(e => e.Email == userDTO.Email))
                     validation.Messages.Add("Email already exists.");
+
+                if (!Regex.IsMatch(userDTO.Name, namePattern))
+                    validation.Messages.Add("Invalid Name. Only letters are allowed.");
 
                 if (dBConnect.Users.Any(n => n.Name == userDTO.Name))
                     validation.Messages.Add("Username already exists.");   
