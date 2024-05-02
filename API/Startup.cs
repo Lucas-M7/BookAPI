@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Text.RegularExpressions;
+using API.Domain.Validations;
 using BookAPI.Domain.DTOs;
 using BookAPI.Domain.Entities;
 using BookAPI.Domain.Enuns;
@@ -60,7 +60,7 @@ public class Startup
                 builder.WithOrigins("http://127.0.0.1:5500")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
-                    .AllowCredentials();     
+                    .AllowCredentials();
             });
         });
         #endregion
@@ -177,33 +177,8 @@ public class Startup
 
             endpoints.MapPost("/users/", ([FromBody] UserDTO userDTO, IUserService userService, DBConnectContext dBConnect) =>
             {
-                var validation = new ValidationError()
-                {
-                    Messages = []
-                };
-
-                // Validações de Email, Senha, nome de usuário e perfil
-
-                string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-                string namePattern = @"^[a-zA-Z]+$";
-
-                if (!Regex.IsMatch(userDTO.Email, emailPattern))
-                    validation.Messages.Add("invalid email make sure you use the right characters.");
-
-                if (dBConnect.Users.Any(e => e.Email == userDTO.Email))
-                    validation.Messages.Add("Email already exists.");
-
-                if (!Regex.IsMatch(userDTO.Name, namePattern))
-                    validation.Messages.Add("Invalid Name. Only letters are allowed.");
-
-                if (dBConnect.Users.Any(n => n.Name == userDTO.Name))
-                    validation.Messages.Add("Username already exists.");   
-
-                if (string.IsNullOrEmpty(userDTO.Password) || userDTO.Password.Length < 4)
-                    validation.Messages.Add("Check that the password is empty or has at least 4 characters.");
-
-                if (userDTO.Profile == null)
-                    validation.Messages.Add("Invalid Profile");
+                var userValidator = new UserValidator(dBConnect);
+                var validation = userValidator.Validate(userDTO);
 
                 if (validation.Messages.Count > 0)
                     return Results.BadRequest(validation);
@@ -213,7 +188,7 @@ public class Startup
                     Email = userDTO.Email,
                     Name = userDTO.Name,
                     Password = userDTO.Password,
-                    Profile = userDTO.Profile.ToString() ?? Profile.Common.ToString()
+                    Profile = userDTO.Profile?.ToString() ?? Profile.Common.ToString()
                 };
 
                 userService.Include(user);
@@ -226,27 +201,6 @@ public class Startup
                     Profile = user.Profile
                 });
             })
-            .WithTags("Users");
-
-            endpoints.MapGet("/users/", ([FromQuery] int? page, IUserService userService) =>
-            {
-                var usr = new List<UserModelView>();
-                var users = userService.AllUsers(page);
-                foreach (var user in users)
-                {
-                    usr.Add(new UserModelView
-                    {
-                        Id = user.Id,
-                        Email = user.Email,
-                        Name = user.Name,
-                        Profile = user.Profile
-                    });
-                }
-
-                return Results.Ok(usr);
-            })
-            .RequireAuthorization()
-            .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM" })
             .WithTags("Users");
 
             endpoints.MapGet("/users/{id}", ([FromRoute] int id, IUserService userService) =>
