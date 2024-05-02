@@ -203,6 +203,27 @@ public class Startup
             })
             .WithTags("Users");
 
+            endpoints.MapGet("/users/", ([FromQuery] int? page, IUserService userService) =>
+            {
+                var usr = new List<UserModelView>();
+                var users = userService.AllUsers(page);
+                foreach (var user in users)
+                {
+                    usr.Add(new UserModelView
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Name = user.Name,
+                        Profile = user.Profile
+                    });
+                }
+
+                return Results.Ok(usr);
+            })
+            .RequireAuthorization()
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "ADM" })
+            .WithTags("Users");
+
             endpoints.MapGet("/users/{id}", ([FromRoute] int id, IUserService userService) =>
             {
                 var user = userService.SearchForId(id);
