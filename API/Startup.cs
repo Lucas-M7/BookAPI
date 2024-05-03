@@ -32,6 +32,7 @@ public class Startup
     // Configuração dos serviços
     public void ConfigureServices(IServiceCollection services)
     {
+        #region JWT
         // Configurando Token JWT
         services.AddAuthentication(options =>
         {
@@ -48,6 +49,7 @@ public class Startup
                 ValidateAudience = false
             };
         });
+        #endregion
 
         services.AddAuthorization();
 
@@ -259,27 +261,13 @@ public class Startup
             #endregion
 
             #region Books
-            static ValidationError validationDTO(BookDTO bookDTO)
-            {
-                var validation = new ValidationError
-                {
-                    Messages = []
-                };
-
-                if (string.IsNullOrEmpty(bookDTO.Title))
-                    validation.Messages.Add("Invalid Title.");
-
-                if (string.IsNullOrEmpty(bookDTO.Category))
-                    validation.Messages.Add("Invalid Category.");
-
-                return validation;
-            }
 
             endpoints.MapPost("/books/", ([FromBody] BookDTO bookDTO, IBookService bookService, DBConnectContext connectContext) =>
             {
-                var validation = validationDTO(bookDTO);
+                var validation = new BookValidator();
+                var bookValid = validation.ValidateBook(bookDTO);
 
-                if (validation.Messages.Count > 0)
+                if (bookValid.Messages.Count > 0)
                     return Results.BadRequest(validation);
 
                 var book = new Book
@@ -337,8 +325,10 @@ public class Startup
                 if (book == null)
                     return Results.NotFound();
 
-                var validation = validationDTO(bookDTO);
-                if (validation.Messages.Count > 0)
+                var validation = new BookValidator();
+                var bookValid = validation.ValidateBook(bookDTO);
+
+                if (bookValid.Messages.Count > 0)
                     return Results.BadRequest();
 
                 book.Title = bookDTO.Title;
