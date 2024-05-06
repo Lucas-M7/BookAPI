@@ -180,7 +180,7 @@ public class Startup
             endpoints.MapPost("/users/", ([FromBody] UserDTO userDTO, IUserService userService, DBConnectContext dBConnect) =>
             {
                 var userValidator = new UserValidator(dBConnect);
-                var validation = userValidator.Validate(userDTO);
+                var validation = userValidator.UserValidate(userDTO);
 
                 if (validation.Messages.Count > 0)
                     return Results.BadRequest(validation);

@@ -8,9 +8,9 @@ public class UserValidator(DBConnectContext dBConnect)
 {
     private readonly DBConnectContext _dbConnect = dBConnect;
 
-    public ValidationError Validate(UserDTO userDTO)
+    public ValidationError UserValidate(UserDTO userDTO)
     {
-        var validation = new ValidationError()
+        var validation = new ValidationError() // Instância da classe ValidationError para personalizar as mensages na lista.
         {
             Messages = []
         };
