@@ -56,13 +56,11 @@ public class Startup
         #region Cors
         services.AddCors(options =>
         {
-            options.AddPolicy("AllowSpecifiOrigin",
-            builder =>
+            options.AddDefaultPolicy(builder => 
             {
-                builder.WithOrigins("http://127.0.0.1:5500")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
+                builder.AllowAnyOrigin();
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
             });
         });
         #endregion
